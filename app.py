@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
-from flask_cors import CORS  # ✅ 加這行
+from flask_cors import CORS
+from urllib.parse import unquote  # 為了解碼 MAC 地址中的 %3A
 
 app = Flask(__name__)
-CORS(app)  # ✅ 允許跨網域請求
+CORS(app)  # 啟用跨域支援
 
+# 儲存每個裝置的狀態（記憶體中）
 device_states = {}
 
 @app.route('/')
@@ -20,7 +22,11 @@ def set_command():
     device_states[mac] = cmd
     return jsonify({"status": "ok"})
 
-@app.route('/get_command/<mac>')
+@app.route('/get_command/<path:mac>')  # 使用 <path:mac> 支援冒號
 def get_command(mac):
+    mac = unquote(mac)  # 將 %3A 解碼回冒號
     cmd = device_states.get(mac, "none")
     return jsonify({"cmd": cmd})
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=10000)
