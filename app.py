@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # ✅ 加這行
 
 app = Flask(__name__)
+CORS(app)  # ✅ 允許跨網域請求
+
 device_states = {}
 
 @app.route('/')
