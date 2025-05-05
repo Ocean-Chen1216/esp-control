@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
-
 device_states = {}
 
 @app.route('/')
