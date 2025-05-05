@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: esp-control
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
